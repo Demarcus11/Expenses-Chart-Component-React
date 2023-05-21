@@ -3,7 +3,7 @@ import Logo from "../../images/logo.svg";
 
 export function MyBalance() {
   return (
-    <div className="my-balance | flex-group">
+    <header className="my-balance | flex-group">
       <div>
         <p>My balance</p>
         <span className="my-balance__amount">
@@ -18,6 +18,6 @@ export function MyBalance() {
         </span>
       </div>
       <img className="logo" src={Logo} alt="" />
-    </div>
+    </header>
   );
 }

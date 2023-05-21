@@ -4,6 +4,7 @@ import jsonData from "../../data.json";
 export function Bars({ setMonthTotal }) {
   const [activeBars, setActiveBars] = useState([]);
   const [currentHoveredBar, setCurrentHoveredBar] = useState(null);
+  const [currentFocusedBar, setCurrentFocusedBar] = useState(null);
   const [currentDay, setCurrentDay] = useState("");
 
   const handleClick = (barId) => {
@@ -27,6 +28,10 @@ export function Bars({ setMonthTotal }) {
     } else {
       setCurrentHoveredBar(null);
     }
+  };
+
+  const handleFocus = (barId) => {
+    setCurrentFocusedBar(barId);
   };
 
   useEffect(() => {
@@ -80,35 +85,40 @@ export function Bars({ setMonthTotal }) {
     };
   }, []);
 
+  console.log(currentHoveredBar);
+  console.log(currentFocusedBar);
+
   return (
     <ol className="spending__bar-chart | flex-group">
       {jsonData.map((item) => (
-        <li key={item.day}>
-          <button
-            className={`button`}
-            onClick={() => handleClick(item.day)}
-            onMouseOver={() => handleMouseEnter(item.day)}
-            onMouseOut={() => handleMouseLeave(item.day)}
-          >
-            <div
-              className={`bar ${
-                activeBars.includes(item.day) || item.day === currentDay
-                  ? "active"
-                  : ""
-              }`}
-              style={{
-                height: `${item.amount * 3}px`,
-              }}
-              id={item.day}
-            ></div>
-            <label htmlFor={item.day}>{item.day.substring(0, 3)}</label>
-          </button>
-
+        <li
+          key={item.day}
+          role="button"
+          onClick={() => handleClick(item.day)}
+          onMouseOver={() => handleMouseEnter(item.day)}
+          onMouseOut={() => handleMouseLeave(item.day)}
+          onFocus={() => handleFocus(item.day)}
+        >
+          <div
+            tabIndex={0}
+            className={`bar ${
+              activeBars.includes(item.day) || item.day === currentDay
+                ? "active"
+                : ""
+            }`}
+            style={{
+              height: `${item.amount * 3}px`,
+            }}
+            id={item.day}
+          ></div>
+          <span>{item.day.substring(0, 3)}</span>
           <span
             className={`bar-amount ${
               activeBars.includes(item.day) || item.day === currentDay
                 ? "show"
                 : "" || currentHoveredBar === item.day
+                ? "show"
+                : "" || currentFocusedBar === item.day
                 ? "show"
                 : ""
             }`}
